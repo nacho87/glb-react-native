@@ -9,11 +9,26 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  Button
 } from 'react-native';
 
 export default class reactnativeBootcamp extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {showText: true};
+  }
+
+  toggleText = () => { 
+    this.setState({
+      showText: !this.state.showText
+    });
+  }
+
   render() {
+    let display = this.state.showText ? 'React Native' : 'BootCamp';
+
     return (
       <View style={styles.container}>
         <Text style={styles.text}>
@@ -22,6 +37,10 @@ export default class reactnativeBootcamp extends Component {
         <Text style={styles.text}>
           World
         </Text>
+        <Button
+          onPress={this.toggleText}
+          title={display}
+        />  
       </View>
     );
   }
