@@ -10,14 +10,20 @@ import {
   StyleSheet,
   Text,
   View,
-  Button
+  Button,
+  FlatList
 } from 'react-native';
+
+const URL = 'https://jsonplaceholder.typicode.com/users';
 
 export default class reactnativeBootcamp extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {showText: true};
+    this.state = {
+      users: [],
+      showText: true
+    };
   }
 
   toggleText = () => { 
@@ -26,9 +32,15 @@ export default class reactnativeBootcamp extends Component {
     });
   }
 
+  getUsers() {
+    return fetch(URL)
+      .then(response => response.json())
+  }
+
   render() {
     let display = this.state.showText ? 'React Native' : 'BootCamp';
-
+    let data = this.getUsers();
+    console.warn(data);
     return (
       <View style={styles.container}>
         <Text style={styles.text}>
@@ -40,7 +52,16 @@ export default class reactnativeBootcamp extends Component {
         <Button
           onPress={this.toggleText}
           title={display}
-        />  
+        />
+
+        <Text>
+          {data}
+        </Text>
+
+        <FlatList
+          data={data}
+          renderItem={({item}) => <Text style={styles.item}>{item.name}</Text>}
+        />
       </View>
     );
   }
@@ -55,6 +76,9 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'blue',
+  },
+  item: {
+    color: 'red',
   }
 });
 
