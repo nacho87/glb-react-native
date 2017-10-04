@@ -14,7 +14,7 @@ import {
   FlatList
 } from 'react-native';
 
-const URL = 'https://jsonplaceholder.typicode.com/users';
+// const URL = 'https://jsonplaceholder.typicode.com/users';
 
 export default class reactnativeBootcamp extends Component {
 
@@ -32,15 +32,32 @@ export default class reactnativeBootcamp extends Component {
     });
   }
 
+  // getUsers() {
+  //   return fetch(URL)
+  //     .then(response => {
+  //       console.warn(JSON.stringify(response.json()))
+  //       this.setState({users: response.json()})
+  //     })
+
+  // }
+
   getUsers() {
-    return fetch(URL)
-      .then(response => response.json())
+      return fetch('https://jsonplaceholder.typicode.com/users')
+        .then((response) => response.json())
+        .then((responseJson) => {
+          return this.setState({users: responseJson})
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+
+  componentDidMount() {
+    this.getUsers();
   }
 
   render() {
     let display = this.state.showText ? 'React Native' : 'BootCamp';
-    let data = this.getUsers();
-    console.warn(data);
     return (
       <View style={styles.container}>
         <Text style={styles.text}>
@@ -54,13 +71,10 @@ export default class reactnativeBootcamp extends Component {
           title={display}
         />
 
-        <Text>
-          {data}
-        </Text>
-
         <FlatList
-          data={data}
+          data={this.state.users}
           renderItem={({item}) => <Text style={styles.item}>{item.name}</Text>}
+          keyExtractor={(item, index) => item.id}
         />
       </View>
     );
@@ -78,6 +92,7 @@ const styles = StyleSheet.create({
     color: 'blue',
   },
   item: {
+    flex: 1,
     color: 'red',
   }
 });
