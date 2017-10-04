@@ -6,17 +6,20 @@
 
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
   Button,
   FlatList
 } from 'react-native';
+import { StackNavigator } from 'react-navigation';
 
 // const URL = 'https://jsonplaceholder.typicode.com/users';
 
-export default class reactnativeBootcamp extends Component {
+class reactnativeBootcamp extends Component {
+	static navigationOptions = {
+		title: 'Home',
+	};
 
   constructor(props) {
     super(props);
@@ -58,6 +61,8 @@ export default class reactnativeBootcamp extends Component {
 
   render() {
     let display = this.state.showText ? 'React Native' : 'BootCamp';
+	const { navigate } = this.props.navigation;
+
     return (
       <View style={styles.container}>
         <Text style={styles.text}>
@@ -73,7 +78,12 @@ export default class reactnativeBootcamp extends Component {
 
         <FlatList
           data={this.state.users}
-          renderItem={({item}) => <Text style={styles.item}>{item.name}</Text>}
+          renderItem={
+          	({item}) => 
+          	<Text 
+          		onPress={() => navigate('Single', {user: item})}
+          		style={styles.item}>{item.name}</Text>
+          }
           keyExtractor={(item, index) => item.id}
         />
       </View>
@@ -97,4 +107,27 @@ const styles = StyleSheet.create({
   }
 });
 
-// AppRegistry.registerComponent('reactnativeBootcamp', () => reactnativeBootcamp);
+
+class SingleUser extends React.Component {
+
+  static navigationOptions = ({ navigation }) => ({
+    title: navigation.state.params.user.name,
+    headerTitleStyle: styles.text,
+  });
+
+  render() {
+
+  	const { user } = this.props.navigation.state.params;
+    return (
+      <View>
+        <Text>{user.name}</Text>
+        <Text>{user.email}</Text>
+      </View>
+    );
+  }
+}
+
+export const SimpleApp = StackNavigator({
+  Home: { screen: reactnativeBootcamp },
+  Single: { screen: SingleUser },
+});

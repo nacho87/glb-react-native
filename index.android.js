@@ -6,7 +6,7 @@
 import React, { Component } from 'react';
 import { AppRegistry } from 'react-native';
 
-import reactnativeBootcamp from './src/index';
+import { SimpleApp } from './src/index';
 
 
-AppRegistry.registerComponent('reactnativeBootcamp', () => reactnativeBootcamp);
+AppRegistry.registerComponent('reactnativeBootcamp', () => SimpleApp);
